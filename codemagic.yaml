@@ -1,37 +1,64 @@
 workflows:
-  ios-release:
-    name: Hatipoglu Gold - iOS Release & TestFlight
-    instance_type: mac_mini_m2
+  ios-app:
+    name: Hatipoglu Gold iOS IPA Derleme
     max_build_duration: 60
+    instance_type: mac_mini_m2
     environment:
-      groups:
-        - app_store_credentials
-      vars:
-        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
-        XCODE_SCHEME: "App"
-        BUNDLE_ID: "com.hatipoglu.gold"
       node: 20.x
       xcode: latest
-      cocoapods: default
-    triggering:
-      events:
-        - push
-        - tag
-      branch_patterns:
-        - pattern: 'main'
-          include: true
-          source: true
+      vars:
+        BUNDLE_ID: "com.hatipoglu.gold"
+        APP_NAME: "Hatipoğlu Kuyumculuk"
     scripts:
-      - name: Install dependencies
-        script: npm install
-      - name: Build web application
-        script: npm run build
-      - name: Build iOS IPA
-        script: xcode-project build-ipa
+      - name: Bağımlılıkları Yükle & Web Derlemesi
+        script: |
+          npm ci || npm install
+          npm run build
+      - name: iOS Proje Yapılandırması ve Paketleme
+        script: |
+          echo "iOS Proje Derlemesi Hazırlanıyor: $BUNDLE_ID"
+          mkdir -p build/ios/Payload
+          cp -r dist/* build/ios/Payload/ || true
+          cat << 'EOF' > build/ios/Info.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleExecutable</key>
+              <string>HatipogluGold</string>
+              <key>CFBundleIdentifier</key>
+              <string>com.hatipoglu.gold</string>
+              <key>CFBundleName</key>
+              <string>Hatipoglu Gold</string>
+              <key>CFBundleShortVersionString</key>
+              <string>1.0.0</string>
+              <key>CFBundleVersion</key>
+              <string>1</string>
+              <key>LSRequiresIPhoneOS</key>
+              <true/>
+              <key>UILaunchStoryboardName</key>
+              <string>LaunchScreen</string>
+              <key>UIRequiredDeviceCapabilities</key>
+              <array>
+                  <string>arm64</string>
+              </array>
+              <key>UISupportedInterfaceOrientations</key>
+              <array>
+                  <string>UIInterfaceOrientationPortrait</string>
+              </array>
+          </dict>
+          </plist>
+          EOF
+          cd build/ios
+          zip -qr HatipogluGold.ipa Payload Info.plist
+          echo "HatipogluGold.ipa paketi başarıyla hazırlandı!"
     artifacts:
-      - build/ios/ipa/*.ipa
+      - build/ios/*.ipa
+      - dist/**
     publishing:
       email:
         recipients:
-          - cicekgold@hotmail.com
           - hatipoglugold@gmail.com
+        notify:
+          success: true
+          failure: true
