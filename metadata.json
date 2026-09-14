@@ -1,0 +1,6 @@
+{
+  "name": "Hatipoğlu Kuyumcu Takip",
+  "description": "iOS tabanlı profesyonel kuyumcu stok, canlı altın kurları, müşteri emanet ve satış takip sistemi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
