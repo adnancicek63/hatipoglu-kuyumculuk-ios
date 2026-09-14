@@ -51,7 +51,7 @@ workflows:
           EOF
           cd build/ios
           zip -qr HatipogluGold.ipa Payload Info.plist
-          echo "HatipogluGold.ipa paketi başarıyla hazırlandı!"
+          echo "HatipogluGold.ipa paketi hazırlandı!"
     artifacts:
       - build/ios/*.ipa
       - dist/**
