@@ -1,0 +1,20 @@
+{
+  "id": "/",
+  "name": "Hatipoğlu Kuyumcu Takip",
+  "short_name": "Hatipoğlu",
+  "description": "iOS tabanlı profesyonel kuyumcu stok, canlı altın kurları, emanet ve satış takip sistemi.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0c10",
+  "theme_color": "#0d0e12",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
